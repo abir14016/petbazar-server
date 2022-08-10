@@ -16,7 +16,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        console.log("database connected");
+        const petCollection = client.db('petbazar').collection('pet');
+
+        // pet api for home page
+        app.get('/pet', async (req, res) => {
+            const query = {};
+            const cursor = petCollection.find(query);
+            const pets = await cursor.toArray();
+            res.send(pets);
+        })
     }
     finally {
 
